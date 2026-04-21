@@ -1,23 +1,21 @@
 // ============================================
-// TAG COMPONENT
+// WAYVO WORDMARK COMPONENT
 // ============================================
 
 import React from "react";
 
-export default function Tag({ text }) {
+export default function Wordmark({ size = 20, light = false }) {
   return (
     <span
       style={{
-        fontSize: 10,
-        padding: "3px 7px",
-        borderRadius: 7,
-        background: "var(--color-background-secondary)",
-        color: "var(--color-text-secondary)",
-        border: "0.5px solid var(--color-border-tertiary)",
-        display: "inline-block",
+        fontSize: size,
+        fontWeight: 900,
+        letterSpacing: -0.5,
+        color: light ? "#fff" : "var(--color-text-primary)",
       }}
     >
-      {text}
+      Way
+      <span style={{ color: "#00C896" }}>vo</span>
     </span>
   );
 }

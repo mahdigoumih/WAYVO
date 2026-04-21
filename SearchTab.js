@@ -1,64 +1,46 @@
 // ============================================
-// HEART / WISHLIST BUTTON
+// TOAST NOTIFICATION COMPONENT
 // ============================================
 
-import React from "react";
+import React, { useEffect } from "react";
 
-export default function HeartButton({
-  filled,
-  onToggle,
-  overlay = false,
-  size = 13,
-}) {
+export default function Toast({ message, onClose, duration = 2200 }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose?.();
+    }, duration);
+    return () => clearTimeout(timer);
+  }, [message, duration, onClose]);
+
+  if (!message) return null;
+
   return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onToggle();
-      }}
-      aria-label={filled ? "Remove from wishlist" : "Add to wishlist"}
+    <div
       style={{
-        background: overlay
-          ? "rgba(0,0,0,.35)"
-          : filled
-          ? "#FEE2E2"
-          : "var(--color-background-secondary)",
-        border: overlay
-          ? "none"
-          : filled
-          ? "1px solid #FECACA"
-          : "0.5px solid var(--color-border-tertiary)",
-        borderRadius: "50%",
-        width: 30,
-        height: 30,
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-        padding: 0,
-        transition: "all 0.2s ease",
+        position: "fixed",
+        bottom: 76,
+        left: "50%",
+        transform: "translateX(-50%)",
+        background: "#0D1B2A",
+        color: "#fff",
+        padding: "9px 17px",
+        borderRadius: 12,
+        fontSize: 12,
+        fontWeight: 600,
+        zIndex: 9999,
+        whiteSpace: "nowrap",
+        pointerEvents: "none",
+        animation: "toastSlideUp 0.3s ease",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+        maxWidth: "90vw",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
       }}
+      role="status"
+      aria-live="polite"
     >
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill={filled ? "#E53935" : "none"}
-        stroke={
-          filled
-            ? "#E53935"
-            : overlay
-            ? "rgba(255,255,255,.9)"
-            : "var(--color-text-tertiary)"
-        }
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    </button>
+      {message}
+    </div>
   );
 }

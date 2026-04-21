@@ -1,77 +1,34 @@
 // ============================================
-// SPLASH SCREEN
-// Animated app launch screen
+// TYPING INDICATOR COMPONENT
 // ============================================
 
-import React, { useEffect, useState } from "react";
-import Logo from "./ui/Logo";
+import React from "react";
 
-export default function SplashScreen({ onComplete }) {
-  const [stage, setStage] = useState(0);
-
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => setStage(1), 400),
-      setTimeout(() => setStage(2), 1200),
-      setTimeout(() => onComplete(), 2800),
-    ];
-
-    return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
-
+export default function TypingIndicator({ color = "#00C896" }) {
   return (
     <div
       style={{
-        minHeight: "100vh",
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--color-background-tertiary)",
-        fontFamily: "var(--font-sans)",
+        gap: 4,
+        padding: "9px 13px",
+        background: "var(--color-background-primary)",
+        borderRadius: "15px 15px 15px 4px",
+        border: "0.5px solid var(--color-border-tertiary)",
       }}
     >
-      <div
-        style={{
-          animation: stage >= 1 ? "logoScale 0.6s ease forwards" : "none",
-          opacity: stage >= 1 ? 1 : 0,
-          transform: stage >= 1 ? "scale(1)" : "scale(0.5)",
-          transition: "all 0.6s ease",
-        }}
-      >
-        <Logo size={60} />
-      </div>
-
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: 16,
-          opacity: stage >= 2 ? 1 : 0,
-          transform: stage >= 2 ? "translateY(0)" : "translateY(10px)",
-          transition: "all 0.5s ease",
-        }}
-      >
-        <p
+      {[0, 0.2, 0.4].map((delay, i) => (
+        <span
+          key={i}
           style={{
-            fontSize: 22,
-            fontWeight: 900,
-            letterSpacing: -1,
-            color: "#fff",
-            margin: "0 0 4px",
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: color,
+            display: "inline-block",
+            animation: `typingPulse 0.9s ${delay}s infinite`,
           }}
-        >
-          Way<span style={{ color: "#00C896" }}>vo</span>
-        </p>
-        <p
-          style={{
-            fontSize: 11,
-            color: "rgba(255,255,255,.4)",
-            margin: 0,
-          }}
-        >
-          Morocco's premium AI travel companion
-        </p>
-      </div>
+        />
+      ))}
     </div>
   );
 }

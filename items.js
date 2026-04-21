@@ -1,320 +1,49 @@
 // ============================================
-// EXPERIENCE CARD COMPONENT
-// Follows SRP: single responsibility - display experience data
-// Uses React.memo for performance optimization [^42^]
+// WISHLIST SCREEN
 // ============================================
 
-import React, { memo } from "react";
-import Pill from "./Pill";
-import Tag from "./Tag";
-import HeartButton from "./HeartButton";
+import React from "react";
+import Card from "../ui/Card";
+import Pill from "../ui/Pill";
+import { ITEMS } from "../../data/items";
 
-const Card = memo(function Card({
-  item,
+export default function WishlistScreen({
   wished,
-  onWish,
-  onOpen,
-  compact = false,
+  wishlistCount,
+  wishlistValue,
+  userPoints,
+  onToggleWish,
+  onOpenItem,
+  onGoToSearch,
+  onBack,
 }) {
-  const isHotel = item.cat === "hotels";
-  const urgency = item.avail <= 3;
+  const wItems = ITEMS.filter((i) => wished.has(i.id));
 
-  // Compact card variant (for search results)
-  if (compact) {
-    return (
-      <article
-        onClick={() => onOpen(item)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && onOpen(item)}
-        aria-label={`${item.title}, ${item.price} dollars`}
-        style={{
-          display: "flex",
-          background: "var(--color-background-primary)",
-          border: `0.5px solid ${urgency ? "#FCD34D" : "var(--color-border-tertiary)"}`,
-          borderRadius: 13,
-          overflow: "hidden",
-          cursor: "pointer",
-          marginBottom: 8,
-          transition: "all 0.2s ease",
-        }}
-        className="hover-lift"
-      >
-        {/* Color block with emoji */}
-        <div
-          style={{
-            width: 82,
-            background: `linear-gradient(135deg,${item.col}40,${item.col}80,#0D1B2A)`,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 26,
-            flexShrink: 0,
-            gap: 3,
-            padding: 4,
-          }}
-        >
-          <span aria-hidden="true">{item.em}</span>
-          {item.eco && (
-            <span
-              style={{
-                fontSize: 8,
-                background: "#DCFCE7",
-                color: "#166534",
-                padding: "1px 4px",
-                borderRadius: 4,
-                fontWeight: 700,
-              }}
-            >
-              ECO
-            </span>
-          )}
-        </div>
-
-        {/* Content */}
-        <div
-          style={{
-            flex: 1,
-            padding: "9px 11px 9px 12px",
-            minWidth: 0,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              marginBottom: 2,
-            }}
-          >
-            <h3
-              style={{
-                margin: 0,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--color-text-primary)",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                flex: 1,
-                paddingRight: 5,
-              }}
-            >
-              {item.title}
-            </h3>
-            <HeartButton filled={wished} onToggle={() => onWish(item.id)} />
-          </div>
-
-          <p
-            style={{
-              margin: "0 0 4px",
-              fontSize: 10,
-              color: "var(--color-text-secondary)",
-            }}
-          >
-            📍 {item.loc}
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: 13,
-                  fontWeight: 800,
-                  color: "#0D1B2A",
-                }}
-              >
-                ${item.price}
-                <span
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 400,
-                    color: "var(--color-text-tertiary)",
-                  }}
-                >
-                  {isHotel ? "/night" : "/person"}
-                </span>
-              </p>
-              {item.orig && (
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 9,
-                    color: "var(--color-text-tertiary)",
-                    textDecoration: "line-through",
-                  }}
-                >
-                  ${item.orig}
-                </p>
-              )}
-            </div>
-            <div style={{ textAlign: "right" }}>
-              <p style={{ margin: 0, fontSize: 10, color: "#F5A623" }}>
-                ⭐ {item.rating}
-              </p>
-              {urgency && (
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 9,
-                    color: "#E53935",
-                    fontWeight: 700,
-                  }}
-                >
-                  Only {item.avail} left!
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </article>
-    );
-  }
-
-  // Full card variant (for home screen)
   return (
-    <article
-      onClick={() => onOpen(item)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onOpen(item)}
-      aria-label={`${item.title}, ${item.price} dollars, rated ${item.rating}`}
-      style={{
-        background: "var(--color-background-primary)",
-        border: `0.5px solid ${urgency ? "#FCD34D" : "var(--color-border-tertiary)"}`,
-        borderRadius: 16,
-        overflow: "hidden",
-        cursor: "pointer",
-        marginBottom: 12,
-        transition: "all 0.2s ease",
-      }}
-      className="hover-lift"
-    >
-      {/* Hero color block */}
+    <div style={{ flex: 1, overflowY: "auto", paddingBottom: 80 }}>
+      {/* Header */}
       <div
         style={{
-          height: 120,
-          background: `linear-gradient(135deg,${item.col}30,${item.col}65,#0D1B2A)`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 52,
-          position: "relative",
+          background: "var(--gradient-primary)",
+          padding: "11px 13px 16px",
         }}
       >
-        <span aria-hidden="true">{item.em}</span>
-
-        {/* Badges overlay */}
-        <div
+        <button
+          onClick={onBack}
+          aria-label="Go back"
           style={{
-            position: "absolute",
-            top: 9,
-            left: 10,
-            display: "flex",
-            gap: 4,
-            flexWrap: "wrap",
+            background: "none",
+            border: "none",
+            color: "rgba(255,255,255,.6)",
+            fontSize: 16,
+            cursor: "pointer",
+            padding: 0,
+            marginBottom: 8,
+            display: "block",
           }}
         >
-          <Pill text={item.badge} color="#F5A623" />
-          {item.hot && <Pill text="🔥 Hot" color="#E53935" />}
-          {item.eco && <Pill text="🌿 Eco" color="#0D9488" />}
-          {item.orig && (
-            <Pill
-              text={`Save $${item.orig - item.price}`}
-              color="#fff"
-              bg="#E53935"
-            />
-          )}
-        </div>
-
-        {/* Heart button */}
-        <div style={{ position: "absolute", top: 7, right: 8 }}>
-          <HeartButton
-            filled={wished}
-            onToggle={() => onWish(item.id)}
-            overlay
-          />
-        </div>
-
-        {/* Urgency badge */}
-        {urgency && (
-          <div style={{ position: "absolute", bottom: 8, right: 8 }}>
-            <Pill
-              text={`⚡ ${item.avail} spots left`}
-              color="#E53935"
-              bg="rgba(229,57,53,.85)"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div style={{ padding: "11px 13px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: 2,
-          }}
-        >
-          <h3
-            style={{
-              margin: 0,
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--color-text-primary)",
-              flex: 1,
-              paddingRight: 5,
-            }}
-          >
-            {item.title}
-          </h3>
-          <div style={{ textAlign: "right", flexShrink: 0 }}>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 15,
-                fontWeight: 800,
-                color: "#0D1B2A",
-              }}
-            >
-              ${item.price}
-            </p>
-            {item.orig && (
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: 9,
-                  color: "var(--color-text-tertiary)",
-                  textDecoration: "line-through",
-                }}
-              >
-                ${item.orig}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <p
-          style={{
-            margin: "0 0 6px",
-            fontSize: 10,
-            color: "var(--color-text-secondary)",
-          }}
-        >
-          📍 {item.loc}{" "}
-          {item.duration && `· ⏱ ${item.duration}`}
-        </p>
-
+          ←
+        </button>
         <div
           style={{
             display: "flex",
@@ -322,28 +51,187 @@ const Card = memo(function Card({
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-            {item.tags.slice(0, 2).map((t) => (
-              <Tag key={t} text={t} />
-            ))}
+          <div>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: 17,
+                fontWeight: 800,
+                color: "#fff",
+                letterSpacing: -0.5,
+              }}
+            >
+              My Wishlist
+            </h1>
+            <p
+              style={{
+                margin: "3px 0 0",
+                fontSize: 10,
+                color: "rgba(255,255,255,.4)",
+              }}
+            >
+              {wishlistCount} saved · {userPoints} Wayvo Points
+            </p>
           </div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: 10,
-              color: "#F5A623",
-              flexShrink: 0,
-            }}
-          >
-            ⭐ {item.rating}{" "}
-            <span style={{ color: "var(--color-text-tertiary)" }}>
-              ({item.reviews})
-            </span>
-          </p>
+          {wishlistCount > 0 && (
+            <Pill
+              text={`❤️ ${wishlistCount}`}
+              color="#FCA5A5"
+              bg="rgba(229,57,53,.2)"
+            />
+          )}
         </div>
       </div>
-    </article>
-  );
-});
 
-export default Card;
+      <div style={{ padding: "12px" }}>
+        {wishlistCount === 0 ? (
+          /* Empty state */
+          <div style={{ textAlign: "center", padding: "44px 20px" }}>
+            <p style={{ fontSize: 40, margin: "0 0 9px" }}>🤍</p>
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 800,
+                color: "var(--color-text-primary)",
+                margin: "0 0 6px",
+              }}
+            >
+              Wishlist is empty
+            </p>
+            <p
+              style={{
+                fontSize: 12,
+                color: "var(--color-text-secondary)",
+                margin: "0 0 16px",
+              }}
+            >
+              Tap ❤️ on any experience to save it.
+            </p>
+            <button
+              onClick={onGoToSearch}
+              style={{
+                padding: "10px 20px",
+                background: "#00C896",
+                border: "none",
+                borderRadius: 10,
+                color: "#fff",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+            >
+              Explore →
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Stats */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 8,
+                marginBottom: 11,
+              }}
+            >
+              <div
+                style={{
+                  background: "var(--color-background-primary)",
+                  border: "0.5px solid var(--color-border-tertiary)",
+                  borderRadius: 10,
+                  padding: "10px",
+                  textAlign: "center",
+                }}
+              >
+                <p style={{ margin: 0, fontSize: 17 }}>💰</p>
+                <p
+                  style={{
+                    margin: "3px 0 1px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: "var(--color-text-primary)",
+                  }}
+                >
+                  ${Math.round(
+                    wItems.reduce((s, i) => s + i.price, 0) / wItems.length
+                  )}
+                </p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 10,
+                    color: "var(--color-text-secondary)",
+                  }}
+                >
+                  avg price
+                </p>
+              </div>
+              <div
+                style={{
+                  background: "var(--color-background-primary)",
+                  border: "0.5px solid var(--color-border-tertiary)",
+                  borderRadius: 10,
+                  padding: "10px",
+                  textAlign: "center",
+                }}
+              >
+                <p style={{ margin: 0, fontSize: 17 }}>💰</p>
+                <p
+                  style={{
+                    margin: "3px 0 1px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: "var(--color-text-primary)",
+                  }}
+                >
+                  ${wItems.reduce((s, i) => s + i.price, 0)}
+                </p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 10,
+                    color: "var(--color-text-secondary)",
+                  }}
+                >
+                  total value
+                </p>
+              </div>
+            </div>
+
+            {/* Items */}
+            {wItems.map((it) => (
+              <Card
+                key={it.id}
+                item={it}
+                wished
+                onWish={() => onToggleWish(it.id)}
+                onOpen={onOpenItem}
+                compact
+              />
+            ))}
+
+            <button
+              onClick={onGoToSearch}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "var(--color-background-primary)",
+                border: "1px solid #00C896",
+                borderRadius: 10,
+                color: "#00C896",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                marginTop: 4,
+                transition: "all 0.2s ease",
+              }}
+            >
+              + Explore more
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
