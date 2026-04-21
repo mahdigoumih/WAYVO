@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0D1B2A" />
+  <meta name="description" content="Wayvo - Morocco's premium AI travel companion. Book hotels, tours, food experiences, and transport with expert local guidance." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>Wayvo — Morocco Travel</title>
+  <style>
+    /* Critical CSS for splash screen - prevents flash of unstyled content */
+    body { margin: 0; background: #0D1B2A; }
+    #root:empty::before {
+      content: "";
+      display: block;
+      width: 80px;
+      height: 80px;
+      margin: 40vh auto 0;
+      background: linear-gradient(145deg, #0D1B2A, #1B3A4B 60%, #0D2E1F 100%);
+      border-radius: 20px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+  </style>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run Wayvo.</noscript>
+  <div id="root"></div>
+</body>
+</html>
